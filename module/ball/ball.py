@@ -1,4 +1,5 @@
 import pygame, os
 
 class ball:
-    pass
+    def __init__():
+        pass
