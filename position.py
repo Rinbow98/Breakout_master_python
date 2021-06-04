@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jun  4 10:51:36 2021
-
-@author: david
-"""
 length = 11
 width = 6
 level1 = [[0,0,0,0,0,1,0,0,0,0,0],
