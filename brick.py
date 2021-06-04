@@ -24,6 +24,6 @@ class brick:
             self.pg.draw.rect(self.screen, self.color, (30*self.j,10*self.i,30,10), 2)
         self.i += 1
         self.j += 1
-        print(self.id)
+        
     def __str__(self):
         return str(self.id) + '\n'
