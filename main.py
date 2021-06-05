@@ -10,12 +10,12 @@ def main():
     pg.init()
     screen = pg.display.set_mode((windowWidth, windowHeight))
     screen.fill((0, 0, 0))
-    brk = [None]*100                          
-    for i in range((position.length-1)*(position.width-1)):
+    brk = [None]*1000                         
+    for i in range((position.height)*(position.width)):
         brk[i] = brick.brick(pg, screen, i)
         brk[i].draw()
 
-
+        
 
     while True:
         for event in pg.event.get():
