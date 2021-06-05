@@ -4,15 +4,15 @@ import position
 
 def main():
 
-    windowWidth = 1280
-    windowHeight = 720
+    windowWidth = 720
+    windowHeight = 540
 
     pg.init()
     screen = pg.display.set_mode((windowWidth, windowHeight))
     screen.fill((0, 0, 0))
-    brk = [None]*1000                         
+    brk = [None]*1000
     for i in range((position.height)*(position.width)):
-        brk[i] = brick.brick(pg, screen, i)
+        brk[i] = brick.brick(pg, screen, i, windowWidth, windowHeight)
         brk[i].draw()
 
         

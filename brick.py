@@ -1,20 +1,22 @@
-import position
+import position, os
 
 class brick:
     
-    def __init__( self, pg, screen, n):
+    def __init__( self, pg, screen, n, windowWidth, windowHeight):
         self.id = n   
         self.pg = pg
         self.screen = screen
         self.i = int( (self.id) / position.width )
-        self.j = int( (self.id) % position.width)
-        self.windowWidth = 1280
-        self.windowHeight = 720
-        self.brk_image = self.pg.image.load("C:\\Users\\david\\Desktop\\python\\期末專題\\GitHub\\Breakout_master_python\\images\\redBrick5.png")
-    def draw(self):       
-        self.brk_image.convert()        
+        self.j = int( (self.id) % position.width )
+        self.imagex = windowWidth//position.width
+        self.imagey = windowHeight//position.width
+        self.image = self.pg.image.load(os.path.join("images", "redBrick1.png")).convert_alpha()
+        self.image = pg.transform.smoothscale(self.image, (self.imagex, self.imagey))
+
+    def draw(self):
+
         if position.level[self.i][self.j] == 1:
-          self.screen.blit(self.brk_image, (self.j*64,self.i*36+200))
+          self.screen.blit(self.image, (self.j*self.imagex, (self.i+3)*self.imagey))
          
         
     def __str__(self):
