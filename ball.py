@@ -4,7 +4,7 @@ class ball(pygame.sprite.Sprite):
        pygame.sprite.Sprite.__init__(self)
        self.windowWidth = windowWidth
        self.windowHight = windowHeight
-       self.radius = 20
+       self.radius = windowWidth // 36
        self.image = pygame.image.load(os.path.join("images", "ball2.png")).convert_alpha()     
        self.image = pygame.transform.smoothscale(self.image, (self.radius, self.radius))
        self.rect = self.image.get_rect()
@@ -18,7 +18,7 @@ class ball(pygame.sprite.Sprite):
        self.rect.y = self.tempy
        
     def ball_onpad(self,x,y):
-        self.tempx = x - int(self.radius/2)
+        self.tempx = x - self.radius // 2
         self.tempy = y - self.radius
         
     
