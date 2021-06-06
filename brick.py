@@ -1,22 +1,20 @@
-import position, os
+import position, os , pygame
 
-class brick:
+class brick(pygame.sprite.Sprite):
     
-    def __init__( self, pg, screen, n, windowWidth, windowHeight):
+    def __init__( self, n, windowWidth, windowHeight):
+        pygame.sprite.Sprite.__init__(self)
         self.id = n   
-        self.pg = pg
-        self.screen = screen
         self.i = int( (self.id) / position.width )
         self.j = int( (self.id) % position.width )
         self.imagex = windowWidth//position.width
         self.imagey = windowHeight//position.width
-        self.image = self.pg.image.load(os.path.join("images", "redBrick1.png")).convert_alpha()
-        self.image = pg.transform.smoothscale(self.image, (self.imagex, self.imagey))
-
-    def draw(self):
-
-        if position.level[self.i][self.j] == 1:
-          self.screen.blit(self.image, (self.j*self.imagex, (self.i+3)*self.imagey))
+        self.image = pygame.image.load(os.path.join("images", "redBrick1.png")).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (self.imagex, self.imagey))
+        self.rect = self.image.get_rect()
+        self.rect.x = self.j*self.imagex
+        self.rect.y = (self.i+3)*self.imagey
+    
          
         
     def __str__(self):
