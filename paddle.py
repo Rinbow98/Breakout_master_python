@@ -1,4 +1,4 @@
-import os , pygame
+import os, pygame
 
 class paddle(pygame.sprite.Sprite):
    def  __init__(self, windowWidth, windowHeight):
@@ -20,6 +20,7 @@ class paddle(pygame.sprite.Sprite):
            self.tempX -= speed
        elif self.right and self.rect.x + self.paddleWidth + speed <= self.windowWidth:
            self.tempX += speed
+           
            
    def update(self):
        self.rect.x = self.tempX

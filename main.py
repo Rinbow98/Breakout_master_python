@@ -1,9 +1,6 @@
 import pygame 
-import brick
-import paddle
-import position
-import ball
-import scoreboard
+import ball, brick, paddle, position, scoreboard
+
 def main():
     ball_state = 'onpad'
     windowWidth = 1280
@@ -15,8 +12,9 @@ def main():
     background = pygame.Surface(screen.get_size())
     background = background.convert()
     background.fill((0, 0, 0))
+    pygame.draw.line(background, (255, 255, 255), (0, windowHeight//10), (windowWidth, windowHeight//10), 1)
 
-    allsprite = pygame.sprite.Group()  
+    allsprite = pygame.sprite.Group()
     
     brk = [None]*1000
     for i in range((position.height)*(position.width)):
@@ -45,16 +43,18 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 mainLoop = False
+
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == ord('a') :
                     pad.left = True
                     pad.right = False
-
                 elif event.key == pygame.K_RIGHT or event.key == ord('d') :
                     pad.right = True
                     pad.left = False
+
                 if event.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
+                
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == ord('a') :
                     pad.left = False

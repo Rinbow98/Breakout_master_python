@@ -1,10 +1,11 @@
-import position, os , pygame
+import os, pygame
+import position
 
 class brick(pygame.sprite.Sprite):
     
     def __init__( self, n, windowWidth, windowHeight):
         pygame.sprite.Sprite.__init__(self)
-        self.id = n   
+        self.id = n
         self.i = int( (self.id) / position.width )
         self.j = int( (self.id) % position.width )
         self.imagex = windowWidth//position.width

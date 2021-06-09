@@ -1,4 +1,5 @@
-import os,pygame
+import os, pygame
+
 class ball(pygame.sprite.Sprite):
     def  __init__(self,windowWidth,windowHeight,x,y):
        pygame.sprite.Sprite.__init__(self)
@@ -13,9 +14,12 @@ class ball(pygame.sprite.Sprite):
        self.state = 'onpad'
        self.tempx = 0
        self.tempy = 0
+
+       
     def update(self):
        self.rect.x = self.tempx
        self.rect.y = self.tempy
+       
        
     def ball_onpad(self,x,y):
         self.tempx = x - self.radius // 2
