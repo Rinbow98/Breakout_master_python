@@ -3,7 +3,7 @@ import brick
 import paddle
 import position
 import ball
-
+import scoreboard
 def main():
     ball_state = 'onpad'
     windowWidth = 1280
@@ -33,6 +33,8 @@ def main():
     gameball = ball.ball(windowWidth, windowWidth, ballx, bally)
     allsprite.add(gameball)
     
+    score_board = scoreboard.scoreboard(windowWidth, windowHeight)
+    allsprite.add(score_board)
     
     clock = pygame.time.Clock()
     fps = 60
@@ -47,6 +49,7 @@ def main():
                 if event.key == pygame.K_LEFT or event.key == ord('a') :
                     pad.left = True
                     pad.right = False
+
                 elif event.key == pygame.K_RIGHT or event.key == ord('d') :
                     pad.right = True
                     pad.left = False
