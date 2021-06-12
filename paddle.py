@@ -1,11 +1,11 @@
 import os, pygame
 
 class paddle(pygame.sprite.Sprite):
-   def  __init__(self, windowWidth, windowHeight):
+   def  __init__(self, windowWidth, windowHeight, speed):
        pygame.sprite.Sprite.__init__(self)
        self.windowWidth = windowWidth
        self.paddleWidth = windowWidth // 6
-       self.paddleHeight = windowWidth // 48
+       self.paddleHeight = windowWidth // 96
        self.image = pygame.image.load(os.path.join("images", "paddle1.png")).convert_alpha()
        self.image = pygame.transform.smoothscale(self.image, (self.paddleWidth, self.paddleHeight))
        self.rect = self.image.get_rect()
@@ -14,12 +14,13 @@ class paddle(pygame.sprite.Sprite):
        self.tempX = self.rect.x 
        self.right = False
        self.left = False
+       self.speed = speed
 
-   def move(self, speed):
-       if self.left and self.rect.x - speed >= 0:
-           self.tempX -= speed
-       elif self.right and self.rect.x + self.paddleWidth + speed <= self.windowWidth:
-           self.tempX += speed
+   def move(self):
+       if self.left and self.rect.x - self.speed >= 0:
+           self.tempX -= self.speed
+       elif self.right and self.rect.x + self.paddleWidth + self.speed <= self.windowWidth:
+           self.tempX += self.speed
            
            
    def update(self):
@@ -27,4 +28,4 @@ class paddle(pygame.sprite.Sprite):
        
        
    def getxy(self):
-       return self.tempX,self.rect.y
+       return self.tempX, self.rect.y
