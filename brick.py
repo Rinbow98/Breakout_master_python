@@ -15,8 +15,11 @@ class brick(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.j*self.imagex
         self.rect.y = (self.i+3)*self.imagey
-    
+        self.point = 10
          
         
     def __str__(self):
         return str(self.id) + '\n'
+
+    def reset(self):
+        pass
