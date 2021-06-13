@@ -14,7 +14,7 @@ class brick(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale(self.image, (self.brickWidth, self.brickHeight))
         self.rect = self.image.get_rect()
         self.rect.x = self.j*self.brickWidth
-        self.rect.y = (self.i+3)*self.brickHeight
+        self.rect.y = (self.i+2)*self.brickHeight
         self.point = 10
          
         

@@ -18,6 +18,7 @@ class ball(pygame.sprite.Sprite):
         self.angle = random.random()*math.pi/3*2 + math.pi/6*7
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
+        self.start_tick = pygame.time.get_ticks()
 
     def update(self):
         self.rect.x = self.tempx
@@ -27,7 +28,10 @@ class ball(pygame.sprite.Sprite):
         self.tempx = x - self.radius // 2
         self.tempy = y - self.radius - 1
         
-    def move(self,speed):
+    def move(self):
+        speed_rate = math.log(math.exp(1)+(pygame.time.get_ticks()-self.start_tick)/10000)
+        self.dx = self.speed * math.cos(self.angle) * speed_rate
+        self.dy = self.speed * math.sin(self.angle) * speed_rate
         self.tempx += self.dx
         self.tempy += self.dy
     
