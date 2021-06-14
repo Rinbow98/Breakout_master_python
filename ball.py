@@ -43,9 +43,5 @@ class ball(pygame.sprite.Sprite):
         self.angle %= math.pi*2
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
+
         
-      
-        
-    
-       
-    
