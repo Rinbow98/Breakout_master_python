@@ -24,7 +24,12 @@ def gameloop(screen,lev,lif,sco):
     collision = pygame.mixer.Sound(os.path.join("sounds", "sfxCollision.wav"))
     point = pygame.mixer.Sound(os.path.join("sounds", "sfxPoint.wav"))
     bgmLevel = pygame.mixer.Sound(os.path.join("sounds", "bgmLevel.wav"))
-    
+    button = pygame.mixer.Sound(os.path.join("sounds", "sfxButton.wav"))
+    click = pygame.mixer.Sound(os.path.join("sounds", "sfxClick.wav"))
+   
+
+    button.set_volume(SFX)
+    click.set_volume(SFX)  
     bonusitem.set_volume(SFX)
     collision.set_volume(SFX)
     point.set_volume(SFX)
@@ -36,8 +41,10 @@ def gameloop(screen,lev,lif,sco):
     background = background.convert()
     background.fill((0, 0, 0))
     pygame.draw.line(background, (255, 255, 255), (0, windowHeight//10), (windowWidth, windowHeight//10), 1)
+    whiteGear_pic = pygame.image.load(os.path.join("images", "whiteGear.png")).convert_alpha()
+    whiteGear = pygame.transform.smoothscale(whiteGear_pic, (windowWidth//18, windowHeight//18))
+    background.blit(whiteGear,(windowWidth*28//30,windowHeight*1//29))
     
-
     clock = pygame.time.Clock()
     fps = 60
     speed = windowWidth // fps // 2
@@ -64,7 +71,7 @@ def gameloop(screen,lev,lif,sco):
     
     mainLoop = True
     while mainLoop:
-        
+        mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 mainLoop = False
@@ -91,7 +98,13 @@ def gameloop(screen,lev,lif,sco):
                     pad.left = False
                 elif event.key == pygame.K_RIGHT or event.key == ord('d') :
                     pad.right = False
-                    
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if windowWidth*28//30 <= mouse[0] <= (windowWidth*28//30 + windowWidth//18) and windowHeight*1//29 <= mouse[1] <= (windowHeight*1//29 + windowHeight//18):
+                    click.play()
+                    screen.fill((0,0,0))
+                    pygame.display.update()
+                    setting(screen)
+                       
         if gameball.state == 'moving':
             gameball.move()
             x = gameball.rect.x+gameball.dx*2-pad.rect.x-pad.paddleWidth/2
@@ -171,6 +184,111 @@ def gameloop(screen,lev,lif,sco):
     return life,score_board.get_score(),False
 
 
+def setting(screen):
+
+    global windowWidth, windowHeight, SFX, BGM, full
+
+    pygame.init()
+    pygame.mixer.init()
+   
+    soundplay = False
+    button = pygame.mixer.Sound(os.path.join("sounds", "sfxButton.wav"))
+    click = pygame.mixer.Sound(os.path.join("sounds", "sfxClick.wav"))
+    point = pygame.mixer.Sound(os.path.join("sounds", "sfxPoint.wav"))
+    
+    button.set_volume(SFX)
+    click.set_volume(SFX)  
+    point.set_volume(SFX)
+    
+    background = pygame.Surface(screen.get_size())
+    background = background.convert()
+    background.fill((0, 0, 0))
+
+    restart_pic = pygame.image.load(os.path.join("images", "restart.png")).convert_alpha()
+    restart_button = pygame.transform.smoothscale(restart_pic, (windowWidth//6, windowHeight//12))
+    background.blit(restart_button,(windowWidth*13//30,windowHeight*8//30))
+    
+    option_pic = pygame.image.load(os.path.join("images", "option.png")).convert_alpha()
+    option_button = pygame.transform.smoothscale(option_pic, (windowWidth//6, windowHeight//12))
+    background.blit(option_button,(windowWidth*13//30,windowHeight*14//30))
+    
+    resume_pic = pygame.image.load(os.path.join("images", "resume.png")).convert_alpha()    
+    resume_button = pygame.transform.smoothscale(resume_pic, (windowWidth//6, windowHeight//12))
+    background.blit(resume_button,(windowWidth*13//30,windowHeight*20//30))
+    
+
+    mainloop = True
+    while mainloop:
+        
+        screen.blit(background,(0,0))
+        pygame.display.update()
+        
+        mouse = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                mainloop = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if windowWidth*13//30 <= mouse[0] <= (windowWidth*13//30 + windowWidth//6) and windowHeight*8//30 <= mouse[1] <= (windowHeight*8//30 + windowHeight//12):
+                    click.play()
+                    main()
+                elif windowWidth*13//30 <= mouse[0] <= (windowWidth*13//30 + windowWidth//6) and windowHeight*14//30 <= mouse[1] <= (windowHeight*14//30 + windowHeight//12):
+                    click.play()
+                    screen.fill((0,0,0))
+                    pygame.display.update()
+                    option(screen)          
+                    background = pygame.Surface(screen.get_size())
+                    background = background.convert()
+                    background.fill((0,0,0))
+
+                    pygame.display.update()
+                    button.set_volume(SFX)
+                    click.set_volume(SFX)
+                    
+
+                elif windowWidth*13//30 <= mouse[0] <= (windowWidth*13//30 + windowWidth//6) and windowHeight*20//30 <= mouse[1] <= (windowHeight*20//30 + windowHeight//12):
+                    mainloop = False
+
+        screen.blit(background, (0,0))
+        if windowWidth*13//30 <= mouse[0] <= (windowWidth*13//30 + windowWidth//6) and windowHeight*8//30 <= mouse[1] <= (windowHeight*8//30 + windowHeight//12):
+            pygame.draw.rect(background, (0,0,0), (windowWidth*10//25, windowHeight*8//33, windowWidth//5, windowHeight//6))
+            restart_button = pygame.transform.smoothscale(restart_pic, (windowWidth//5, windowHeight//10))
+            background.blit(restart_button, (windowWidth*6//15, windowHeight*10//40))
+            if not soundplay:
+                button.play()
+                soundplay = True
+
+        elif windowWidth*13//30 <= mouse[0] <= (windowWidth*13//30 + windowWidth//6) and windowHeight*14//30 <= mouse[1] <= (windowHeight*14//30 + windowHeight//12):
+            pygame.draw.rect(background, (0,0,0), (windowWidth*10//25, windowHeight*13//30, windowWidth//5, windowHeight//8))
+            option_button = pygame.transform.smoothscale(option_pic, (windowWidth//5, windowHeight//10))
+            background.blit(option_button, (windowWidth*4//10, windowHeight*18//40))
+            if not soundplay:
+                button.play()
+                soundplay = True
+
+        elif windowWidth*13//30 <= mouse[0] <= (windowWidth*13//30 + windowWidth//6) and windowHeight*20//30 <= mouse[1] <= (windowHeight*20//30 + windowHeight//12):
+            pygame.draw.rect(background, (0,0,0) ,(windowWidth*10//25, windowHeight*20//33, windowWidth//5, windowHeight//8))
+            resume_button = pygame.transform.smoothscale(resume_pic, (windowWidth//5, windowHeight//10))
+            background.blit(resume_button, (windowWidth*4//10, windowHeight*25//40))
+            if not soundplay:
+                button.play()
+                soundplay = True
+
+        else:
+            
+            pygame.draw.rect(background,(0,0,0),(windowWidth*12//30,windowHeight*10//40,windowWidth//4, windowHeight//2))
+            restart_button = pygame.transform.smoothscale(restart_pic, (windowWidth//6, windowHeight//12))
+            background.blit(restart_button,(windowWidth*13//30,windowHeight*8//30))
+            option_button = pygame.transform.smoothscale(option_pic, (windowWidth//6, windowHeight//12))
+            background.blit(option_button,(windowWidth*13//30,windowHeight*14//30))
+            resume_button = pygame.transform.smoothscale(resume_pic, (windowWidth//6, windowHeight//12))
+            background.blit(resume_button,(windowWidth*13//30,windowHeight*19//30))
+            soundplay = False
+        
+
+
+        pygame.display.update()
+    
 def option(screen):
 
     global windowWidth, windowHeight, SFX, BGM, full
@@ -731,7 +849,7 @@ def main():
 
     total_level = 10
     current_level = 1
-    current_life = 5
+    current_life = 1
     current_score = 0
     
     
@@ -801,7 +919,7 @@ def main():
                         pygame.time.wait(1000)
                         
                         current_life,current_score,game_judge = gameloop(screen,current_level,current_life,current_score)
-                        print(current_life,current_score,game_judge)
+                       
                         if game_judge and current_level < total_level:
                             current_level += 1
                         elif game_judge and current_level == total_level:
