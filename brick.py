@@ -10,8 +10,8 @@ class brick(pygame.sprite.Sprite):
         self.j = int( (self.id) % position.width )
         self.brickWidth = windowWidth//position.width
         self.brickHeight = windowHeight//position.width
-        self.image = pygame.image.load(os.path.join("images", "redBrick1.png")).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, (self.brickWidth, self.brickHeight))
+        self.image_pic = pygame.image.load(os.path.join("images", "redBrick1.png")).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image_pic, (self.brickWidth, self.brickHeight))
         self.rect = self.image.get_rect()
         self.rect.x = self.j*self.brickWidth
         self.rect.y = (self.i+2)*self.brickHeight
@@ -23,3 +23,11 @@ class brick(pygame.sprite.Sprite):
 
     def reset(self):
         pass
+
+    def change(self, windowWidth, windowHeight):
+        self.brickWidth = windowWidth//position.width
+        self.brickHeight = windowHeight//position.width
+        self.image = pygame.transform.smoothscale(self.image_pic, (self.brickWidth, self.brickHeight))
+        self.rect = self.image.get_rect()
+        self.rect.x = self.j*self.brickWidth
+        self.rect.y = (self.i+2)*self.brickHeight

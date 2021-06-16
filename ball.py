@@ -6,8 +6,8 @@ class ball(pygame.sprite.Sprite):
         self.windowWidth = windowWidth
         self.windowHight = windowHeight
         self.radius = windowWidth // 72
-        self.image = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()     
-        self.image = pygame.transform.smoothscale(self.image, (self.radius, self.radius))
+        self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()     
+        self.image = pygame.transform.smoothscale(self.image_pic, (self.radius, self.radius))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y - self.radius
@@ -45,3 +45,16 @@ class ball(pygame.sprite.Sprite):
         self.dy = self.speed * math.sin(self.angle)
 
         
+    def change(self, windowWidth, windowHeight):
+        self.radius = windowWidth // 72
+        self.image = pygame.transform.smoothscale(self.image, (self.radius, self.radius))
+        self.rect = self.image.get_rect()
+        self.rect.x = self.rect.x * windowWidth // self.windowWidth
+        self.rect.y = self.rect.y * windowWidth // self.windowWidth
+        self.tempx = self.tempx * windowWidth // self.windowWidth
+        self.tempy = self.tempy * windowWidth // self.windowWidth
+        self.speed = self.speed * windowWidth / self.windowWidth
+        self.dx = self.speed * math.cos(self.angle)
+        self.dy = self.speed * math.sin(self.angle)
+        self.windowWidth = windowWidth
+        self.windowHight = windowHeight

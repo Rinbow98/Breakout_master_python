@@ -7,7 +7,7 @@ class scoreboard(pygame.sprite.Sprite):
         self.windowWidth = windowWidth
         self.score = score
         self.life = life
-        self.fontSize = windowWidth // 32
+        self.fontSize = self.windowWidth // 32
         self.font = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), self.fontSize)
         self.image = self.font.render(" Score:%s                      Life:%s" % (self.score, self.life), True,  (255, 255, 255),(0, 0, 0))
         self.rect = self.image.get_rect()
@@ -27,8 +27,19 @@ class scoreboard(pygame.sprite.Sprite):
     def reset(self):
         self.score = 0
         
+
     def losslife(self):
         self.life -= 1
+
     
     def get_score(self):
         return self.score
+
+    def change(self, windowWidth, windowHeight):
+        self.windowWidth = windowWidth
+        self.fontSize = self.windowWidth // 32
+        self.font = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), self.fontSize)
+        self.image = self.font.render(" Score:%s                      Life:%s" % (self.score, self.life), True,  (255, 255, 255),(0, 0, 0))
+        self.rect = self.image.get_rect()
+        self.rect.x = (windowWidth - ( 6+len(str(self.score)+str(self.life)) )*self.fontSize//2) // 2
+        self.rect.y = windowHeight // 50
