@@ -16,7 +16,9 @@ class paddle(pygame.sprite.Sprite):
         self.right = False
         self.left = False
         self.speed = speed
-
+        self.max_paddleWidth = windowWidth // 4
+        self.min_paddleWidth = windowWidth // 8
+        
     def move(self):
         if self.left and self.rect.x - self.speed >= 0:
             self.tempX -= self.speed
@@ -42,3 +44,17 @@ class paddle(pygame.sprite.Sprite):
         self.speed = self.speed * windowWidth // self.windowWidth
         self.windowWidth = windowWidth
         self.windowHeight = windowHeight
+        self.max_paddleWidth = windowWidth // 4
+        self.min_paddleWidth = windowWidth // 8
+        
+    def longer_paddle(self):
+        if self.paddleWidth + self.paddleWidth*2//10 <= self.max_paddleWidth:
+            self.paddleWidth += self.paddleWidth*2//10
+            self.image_pic = pygame.image.load(os.path.join("images", "paddle1.png")).convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image_pic, (self.paddleWidth, self.paddleHeight))
+            
+    def shorter_paddle(self):
+        if self.paddleWidth - self.paddleWidth*2//10 >= self.min_paddleWidth:
+            self.paddleWidth -= self.paddleWidth*2//10
+            self.image_pic = pygame.image.load(os.path.join("images", "paddle1.png")).convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image_pic, (self.paddleWidth, self.paddleHeight))
