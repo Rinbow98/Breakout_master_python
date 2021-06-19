@@ -12,6 +12,8 @@ class ball(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y - self.radius
         self.state = 'onpad'
+        self.state_sticky = False
+        self.state_penetrate = False
         self.tempx = 0
         self.tempy = 0
         self.speed = speed
@@ -19,6 +21,10 @@ class ball(pygame.sprite.Sprite):
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
         self.start_tick = pygame.time.get_ticks()
+        self.bonus1_start_tick = pygame.time.get_ticks()
+        self.bonus2_start_tick = pygame.time.get_ticks()
+        self.bonus3_start_tick = pygame.time.get_ticks()
+        
 
     def update(self):
         self.rect.x = self.tempx
@@ -58,3 +64,7 @@ class ball(pygame.sprite.Sprite):
         self.dy = self.speed * math.sin(self.angle)
         self.windowWidth = windowWidth
         self.windowHight = windowHeight
+        
+    def angle_reset(self):
+        self.angle = random.random()*math.pi/3*2 + math.pi/6*7
+        
