@@ -12,6 +12,7 @@ class ball(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y - self.radius
         self.state = 'onpad'
+        self.pos_on_pad = 0
         self.state_sticky = False
         self.state_penetrate = False
         self.tempx = 0
@@ -21,9 +22,9 @@ class ball(pygame.sprite.Sprite):
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
         self.start_tick = pygame.time.get_ticks()
-        self.bonus1_start_tick = pygame.time.get_ticks()
-        self.bonus2_start_tick = pygame.time.get_ticks()
-        self.bonus3_start_tick = pygame.time.get_ticks()
+        self.bonus_start_tick = [None]*5
+        for i in range(5):
+            self.bonus_start_tick[i] = pygame.time.get_ticks()
         
 
     def update(self):
@@ -31,7 +32,7 @@ class ball(pygame.sprite.Sprite):
         self.rect.y = self.tempy
        
     def onpad(self,x,y):
-        self.tempx = x - self.radius // 2
+        self.tempx = x + self.pos_on_pad
         self.tempy = y - self.radius - 1
         
     def move(self):
@@ -53,10 +54,11 @@ class ball(pygame.sprite.Sprite):
         
     def change(self, windowWidth, windowHeight):
         self.radius = windowWidth // 72
-        self.image = pygame.transform.smoothscale(self.image, (self.radius, self.radius))
+        self.image = pygame.transform.smoothscale(self.image_pic, (self.radius, self.radius))
         self.rect = self.image.get_rect()
         self.rect.x = self.rect.x * windowWidth // self.windowWidth
         self.rect.y = self.rect.y * windowWidth // self.windowWidth
+        self.pos_on_pad = self.pos_on_pad * windowWidth // self.windowWidth
         self.tempx = self.tempx * windowWidth // self.windowWidth
         self.tempy = self.tempy * windowWidth // self.windowWidth
         self.speed = self.speed * windowWidth / self.windowWidth
@@ -67,4 +69,24 @@ class ball(pygame.sprite.Sprite):
         
     def angle_reset(self):
         self.angle = random.random()*math.pi/3*2 + math.pi/6*7
+        self.dx = self.speed * math.cos(self.angle)
+        self.dy = self.speed * math.sin(self.angle)
         
+    def penetrate(self):
+        if self.state_penetrate:
+            self.image_pic = pygame.image.load(os.path.join("images", "ballPenetrate.png")).convert_alpha()
+        else:
+            self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image_pic, (self.radius, self.radius))
+        self.rect = self.image.get_rect()
+        self.rect.x = self.tempx
+        self.rect.y = self.tempy
+
+    def reset(self):
+        self.angle = random.random()*math.pi/3*2 + math.pi/6*7
+        self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image_pic, (self.radius, self.radius))
+        self.rect = self.image.get_rect()
+        self.state = 'onpad'
+        self.state_sticky = False
+        self.state_penetrate = False

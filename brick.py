@@ -51,7 +51,7 @@ class brick(pygame.sprite.Sprite):
              self.image = pygame.transform.smoothscale(self.image_pic, (self.bonusWidth, self.bonusHeight))
              self.state = 'dropping'
         elif self.bonus == 4:
-             self.image_pic = pygame.image.load(os.path.join("images", "bonusWide.png")).convert_alpha()
+             self.image_pic = pygame.image.load(os.path.join("images", "bonusNarrow.png")).convert_alpha()
              self.image = pygame.transform.smoothscale(self.image_pic, (self.bonusWidth, self.bonusHeight))
              self.state = 'dropping'
              
