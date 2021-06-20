@@ -1,8 +1,9 @@
 import os, pygame, random, math
 
 class ball(pygame.sprite.Sprite):
-    def  __init__(self, windowWidth, windowHeight, x, y, speed):
+    def  __init__(self, windowWidth, windowHeight, x, y, speed,n):
         pygame.sprite.Sprite.__init__(self)
+        self.id = n
         self.windowWidth = windowWidth
         self.windowHight = windowHeight
         self.radius = windowWidth // 72
@@ -22,8 +23,8 @@ class ball(pygame.sprite.Sprite):
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
         self.start_tick = pygame.time.get_ticks()
-        self.bonus_start_tick = [None]*5
-        for i in range(5):
+        self.bonus_start_tick = [None]*6
+        for i in range(6):
             self.bonus_start_tick[i] = pygame.time.get_ticks()
         
 
