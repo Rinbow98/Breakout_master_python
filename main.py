@@ -60,8 +60,9 @@ def gameloop(screen,lev,lif,sco):
             brk[i] = brick.brick( i, windowWidth, windowHeight,0)
         k = int( (i) / position.width )
         j = int( (i) % position.width )
-        if position.level[level-1][k][j] == 1:
+        if position.level[level-1][k][j] >= 1:
             allsprite.add(brk[i])
+            brk[i].set_state(position.level[level-1][k][j])
 
             
     pad = paddle.paddle(windowWidth, windowHeight, speed)
