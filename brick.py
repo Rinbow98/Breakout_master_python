@@ -3,9 +3,10 @@ import position
 
 class brick(pygame.sprite.Sprite):
     
-    def __init__( self, n, windowWidth, windowHeight , bonus):
+    def __init__( self, n, windowWidth, windowHeight , bonus ):
         pygame.sprite.Sprite.__init__(self)
         self.id = n
+        self.state = 0
         self.i = int( (self.id) / position.width )
         self.j = int( (self.id) % position.width )
         self.brickWidth = windowWidth//position.width
@@ -54,10 +55,15 @@ class brick(pygame.sprite.Sprite):
              self.image_pic = pygame.image.load(os.path.join("images", "bonusNarrow.png")).convert_alpha()
              self.image = pygame.transform.smoothscale(self.image_pic, (self.bonusWidth, self.bonusHeight))
              self.state = 'dropping'
-             
+        
              
     def move(self):
         self.tempy += 5
               
     def update(self):
         self.rect.y = self.tempy
+    
+    def set_state(self,state):
+        self.state = state
+    
+ 
