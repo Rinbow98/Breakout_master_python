@@ -112,6 +112,7 @@ def gameloop(screen,lev,lif,sco):
                             collision.play()
 
                 if event.key == pygame.K_ESCAPE:
+                    time = pygame.time.get_ticks()
                     bgmLevel.stop()
                     click.play()
                     screen.fill((0,0,0))
@@ -123,6 +124,9 @@ def gameloop(screen,lev,lif,sco):
                     elif num == 2:
                         return lif, sco, True
                     
+                    for i in range(gameball_count):
+                        gameball[i].start_tick += pygame.time.get_ticks() - time
+
                     speed = windowWidth // fps // 2
 
                     button.set_volume(SFX)
@@ -158,6 +162,7 @@ def gameloop(screen,lev,lif,sco):
             elif event.type == pygame.MOUSEBUTTONUP:
                 btnclick = False
                 if windowWidth*17//18 <= mouse[0] <= (windowWidth*17//18 + windowWidth//36) and windowHeight//36 <= mouse[1] <= (windowHeight//36 + windowWidth//18):
+                    time = pygame.time.get_ticks()
                     bgmLevel.stop()
                     click.play()
                     screen.fill((0,0,0))
@@ -169,6 +174,9 @@ def gameloop(screen,lev,lif,sco):
                     elif num == 2:
                         return lif, sco, True
                     
+                    for i in range(gameball_count):
+                        gameball[i].start_tick += pygame.time.get_ticks() - time
+
                     speed = windowWidth // fps // 2
 
                     button.set_volume(SFX)
@@ -321,7 +329,7 @@ def gameloop(screen,lev,lif,sco):
 
         for i in range((position.height)*(position.width)):
             for j in range (gameball_count):
-                if  (pygame.time.get_ticks() - brk[i].hit_tick) > 500 and brk[i].state == 'stationary' and allsprite.has(brk[i]) and gameball[j].rect.y+gameball[j].dy*2 <= brk[i].rect.y+brk[i].brickHeight and gameball[j].rect.y+gameball[j].radius+gameball[j].dy*2 >= brk[i].rect.y and gameball[j].rect.x+gameball[j].dx*2 <= brk[i].rect.x+brk[i].brickWidth and gameball[j].rect.x+gameball[j].radius+gameball[j].dx*2 >= brk[i].rect.x:
+                if  (pygame.time.get_ticks() - brk[i].hit_tick) > 200 and brk[i].state == 'stationary' and allsprite.has(brk[i]) and gameball[j].rect.y+gameball[j].dy*2 <= brk[i].rect.y+brk[i].brickHeight and gameball[j].rect.y+gameball[j].radius+gameball[j].dy*2 >= brk[i].rect.y and gameball[j].rect.x+gameball[j].dx*2 <= brk[i].rect.x+brk[i].brickWidth and gameball[j].rect.x+gameball[j].radius+gameball[j].dx*2 >= brk[i].rect.x:
                     if brk[i].stage == 1:
                         brk[i].bonus_judge()
                         if brk[i].bonus == 0:
