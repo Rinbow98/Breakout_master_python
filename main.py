@@ -303,6 +303,8 @@ def gameloop(screen,lev,lif,sco):
                     life -= 1
                     if life > 0:
                         score_board.losslife()
+                        penetrate = False
+                        sticky = False
                         pad.reset()
                         gameball[0] = ball.ball(windowWidth, windowWidth, pad.tempX, pad.rect.y, speed , 0)
                         allsprite.add(gameball[0])
