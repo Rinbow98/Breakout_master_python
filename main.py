@@ -6,11 +6,11 @@ windowHeight = windowWidth * 9 // 16
 SFX = 0.2
 BGM = 0.1
 full = False
-p_bonus = 1
+p_bonus = 1/3
 bonus_time = 5000
 
 def gameloop(screen,lev,lif,sco):
-    global windowWidth, windowHeight, SFX, BGM, full, p_bonus, bonus_time 
+    global windowWidth, windowHeight, SFX, BGM, full, p_bonus, bonus_time
     
     level = lev
     life = lif
@@ -27,6 +27,8 @@ def gameloop(screen,lev,lif,sco):
     button = pygame.mixer.Sound(os.path.join("sounds", "sfxButton.wav"))
     click = pygame.mixer.Sound(os.path.join("sounds", "sfxClick.wav"))
     bgmLevel = pygame.mixer.Sound(os.path.join("sounds", "bgmLevel.wav"))
+    if lev == 10:
+        bgmLevel = pygame.mixer.Sound(os.path.join("sounds", "bgmBoss.wav"))
     
     button.set_volume(SFX)
     click.set_volume(SFX)  
@@ -55,9 +57,9 @@ def gameloop(screen,lev,lif,sco):
     for i in range((position.height)*(position.width)):
         if random.random() <= p_bonus:
             bonus_num =  random.randint(1,5)
-            brk[i] = brick.brick( i, windowWidth, windowHeight,bonus_num)
+            brk[i] = brick.brick( i, windowWidth, windowHeight, bonus_num)
         else:
-            brk[i] = brick.brick( i, windowWidth, windowHeight,0)
+            brk[i] = brick.brick( i, windowWidth, windowHeight, 0)
         k = int( (i) / position.width )
         j = int( (i) % position.width )
         if position.level[level-1][k][j] >= 1:
@@ -68,7 +70,7 @@ def gameloop(screen,lev,lif,sco):
     pad = paddle.paddle(windowWidth, windowHeight, speed)
     allsprite.add(pad)
     
-    gameball = [None]*1000
+    gameball = [None]*200
     gameball[0] = ball.ball(windowWidth, windowWidth, pad.tempX, pad.rect.y, speed , 0)
     allsprite.add(gameball[0])
     gameball_count = 1
@@ -76,7 +78,10 @@ def gameloop(screen,lev,lif,sco):
     score_board = scoreboard.scoreboard(windowWidth, windowHeight, life, score)
     allsprite.add(score_board)
 
-    has_bonus = [False] * 6
+    has_bonus = [False] * 3
+    bonus_start_tick = [pygame.time.get_ticks()] * 3
+    penetrate = False
+    sticky = False
     gameball[0].pos_on_pad = pad.paddleWidth//2 - gameball[0].radius//2
     btnclick = False
     mainLoop = True
@@ -103,7 +108,7 @@ def gameloop(screen,lev,lif,sco):
                     for i in range (gameball_count):                   
                         if gameball[i].state == 'onpad' :
                             gameball[i].state = 'moving'
-                            ball_leave_tick = pygame.time.get_ticks()
+                            gameball[i].start_tick = pygame.time.get_ticks()
                             collision.play()
 
                 if event.key == pygame.K_ESCAPE:
@@ -195,22 +200,22 @@ def gameloop(screen,lev,lif,sco):
             whiteGear = pygame.transform.smoothscale(whiteGear_pic, (windowWidth//36, windowWidth//36))
             background.blit(whiteGear, (windowWidth*17//18, windowHeight//36))
  
-        pygame.display.update()
         for i in range((position.height)*(position.width)):
             if brk[i].bonus != 0 and brk[i].state == 'dropping':
                 brk[i].move()
             if pygame.sprite.collide_rect(pad,brk[i]) and allsprite.has(brk[i]):
-                for j in range (gameball_count):      
-                    gameball[j].bonus_start_tick[brk[i].bonus] = pygame.time.get_ticks()
-                has_bonus[brk[i].bonus] = True
                 if brk[i].bonus == 1:
-                    for j in range (gameball_count):      
-                        gameball[j].state_penetrate = True
-                        gameball[j].penetrate()
+                    has_bonus[brk[i].bonus] = True
+                    bonus_start_tick[brk[i].bonus] = pygame.time.get_ticks()
+                    penetrate = True
+                    for j in range (gameball_count):
+                        gameball[j].penetrate(penetrate)
                 elif brk[i].bonus == 2:
-                    for j in range (gameball_count):      
-                        gameball[j].state_sticky = True
-                        pad.sticky(gameball[j].state_sticky)
+                    has_bonus[brk[i].bonus] = True
+                    bonus_start_tick[brk[i].bonus] = pygame.time.get_ticks()
+                    sticky = True
+                    for j in range (gameball_count):
+                        pad.sticky(sticky)
                 elif brk[i].bonus == 3:
                     pad.longer_paddle()
                 elif brk[i].bonus == 4:
@@ -221,25 +226,29 @@ def gameloop(screen,lev,lif,sco):
                         if gameball[j].state == 'onpad':
                             addball = False
                             break
-                    if addball:                       
+                    if addball:
                         gameball[gameball_count]  = ball.ball(windowWidth, windowWidth, pad.tempX, pad.rect.y, speed , gameball_count)
+                        gameball[gameball_count].state = 'onpad'
+                        gameball[gameball_count].penetrate(penetrate)
                         allsprite.add(gameball[gameball_count])
-                        gameball_count += 1    
+                        gameball[gameball_count].pos_on_pad = pad.paddleWidth//2 - gameball[0].radius//2
+                        gameball_count += 1
                         pygame.display.update()
                 allsprite.remove(brk[i])
             if brk[i].rect.y >= windowHeight:
                 allsprite.remove(brk[i])
         if True in has_bonus:
-            for i in range(gameball_count):
-                if pygame.time.get_ticks() - gameball[i].bonus_start_tick[1] >= bonus_time:
-                    gameball[i].state_penetrate = False
-                    gameball[i].penetrate()
-                    has_bonus[1] = False
-                if pygame.time.get_ticks() - gameball[i].bonus_start_tick[2] >= bonus_time:
-                    gameball[i].state_sticky = False
-                    pad.sticky(gameball[i].state_sticky)
-                    has_bonus[2] = False
+            if pygame.time.get_ticks() - bonus_start_tick[1] >= bonus_time:
+                penetrate = False
+                has_bonus[1] = False
+                for i in range(gameball_count):
+                    gameball[i].penetrate(penetrate)
+            if pygame.time.get_ticks() - bonus_start_tick[2] >= bonus_time:
+                sticky = False
+                has_bonus[2] = False
+                pad.sticky(sticky)
         
+        fall = [False] * gameball_count
         for i in range(gameball_count):
             if gameball[i].state == 'moving' :
                 gameball[i].move()
@@ -257,7 +266,7 @@ def gameloop(screen,lev,lif,sco):
                     collision.play()
 
                 elif gameball[i].rect.y+gameball[i].radius+gameball[i].dy*2 >= pad.rect.y and gameball[i].rect.y <= pad.rect.y and abs(x) <= pad.paddleWidth/2:
-                    if gameball[i].state_sticky == False:
+                    if sticky == False:
                         if abs(x) > pad.paddleWidth/10:
                             angle = x/pad.paddleWidth*math.pi/3+math.pi/3
                             if gameball[i].angle > angle:
@@ -266,7 +275,7 @@ def gameloop(screen,lev,lif,sco):
                                 gameball[i].angle = (gameball[i].angle-math.pi/6)*(math.pi/6*5-angle)/(angle-math.pi/6)+math.pi/6
                         gameball[i].collide("y")
                     
-                    elif gameball[i].state_sticky == True and (pygame.time.get_ticks() - ball_leave_tick) > 500:
+                    elif sticky == True and (pygame.time.get_ticks() - gameball[i].start_tick) > 500:
                         gameball[i].state = 'onpad'
                         gameball[i].angle_reset()
                         x , y = pad.getxy()
@@ -279,54 +288,55 @@ def gameloop(screen,lev,lif,sco):
                     combo = 0
 
                 elif gameball[i].rect.y+gameball[i].radius+gameball[i].dy*2 >= windowHeight:
-                    loss_life = True
-                    allsprite.remove(gameball[i])
-                    for j in range(gameball_count):
-                        if allsprite.has(gameball[j]):
-                            loss_life = False
-                            break
-                    if loss_life:
-                        life -= 1
-                        if life > 0:
-                            score_board.losslife()
-                            pad.reset()
-                            gameball[0] = ball.ball(windowWidth, windowWidth, pad.tempX, pad.rect.y, speed , 0)
-                            allsprite.add(gameball[0])
-                            gameball_count = 1
-                            combo = 0
-                            x , y = pad.getxy()
-                            gameball[0].pos_on_pad = pad.paddleWidth//2 - gameball[0].radius//2
-                            gameball[0].onpad(x, y)
-                            has_bonus = [False] * 6
-                        else:
-                            bgmLevel.stop()
-                            return life,score_board.get_score(),False
-                        break
+                    fall[i] = True
+        
+        for i in range(gameball_count):
+            if fall[i]:
+                gameball_count -= 1
+                allsprite.remove(gameball[i])
+                for j in range(i, gameball_count):
+                    gameball[j] = gameball[j+1]
+                    fall[j] = fall[j+1]
+                fall[gameball_count] = False
+                gameball[gameball_count] = None
+                if gameball_count == 0:
+                    life -= 1
+                    if life > 0:
+                        score_board.losslife()
+                        pad.reset()
+                        gameball[0] = ball.ball(windowWidth, windowWidth, pad.tempX, pad.rect.y, speed , 0)
+                        allsprite.add(gameball[0])
+                        gameball_count = 1
+                        combo = 0
+                        x , y = pad.getxy()
+                        gameball[0].pos_on_pad = pad.paddleWidth//2 - gameball[0].radius//2
+                        gameball[0].onpad(x, y)
+                        has_bonus = [False] * 6
+                    else:
+                        bgmLevel.stop()
+                        return life,score_board.get_score(),False
+                    break
 
         for i in range((position.height)*(position.width)):
-            for j in range (gameball_count):              
-                if  (pygame.time.get_ticks() - brk[i].hit_tick) > 500 and brk[i].state == 'stationary' and allsprite.has(brk[i]) and brk[i].stage == 1 and gameball[j].rect.y+gameball[j].dy*2 <= brk[i].rect.y+brk[i].brickHeight and gameball[j].rect.y+gameball[j].radius+gameball[j].dy*2 >= brk[i].rect.y and gameball[j].rect.x+gameball[j].dx*2 <= brk[i].rect.x+brk[i].brickWidth and gameball[j].rect.x+gameball[j].radius+gameball[j].dx*2 >= brk[i].rect.x:
+            for j in range (gameball_count):
+                if  (pygame.time.get_ticks() - brk[i].hit_tick) > 500 and brk[i].state == 'stationary' and allsprite.has(brk[i]) and gameball[j].rect.y+gameball[j].dy*2 <= brk[i].rect.y+brk[i].brickHeight and gameball[j].rect.y+gameball[j].radius+gameball[j].dy*2 >= brk[i].rect.y and gameball[j].rect.x+gameball[j].dx*2 <= brk[i].rect.x+brk[i].brickWidth and gameball[j].rect.x+gameball[j].radius+gameball[j].dx*2 >= brk[i].rect.x:
+                    if brk[i].stage == 1:
+                        brk[i].bonus_judge()
+                        if brk[i].bonus == 0:
+                            allsprite.remove(brk[i])
+                    elif brk[i].stage > 1:
+                        brk[i].change_stage()
                     score_board.add(round(brk[i].point*(1+combo*0.5)))
-                    brk[i].bonus_judge()
                     combo+=1
-                    if brk[i].bonus == 0:
-                        allsprite.remove(brk[i])
-                    elif gameball[j].state_penetrate == False and gameball[j].rect.x > brk[i].rect.x+brk[i].brickWidth or gameball[j].rect.x+gameball[j].radius < brk[i].rect.x:
+                    if penetrate == True:
+                        pass
+                    elif gameball[j].rect.x > brk[i].rect.x+brk[i].brickWidth or gameball[j].rect.x+gameball[j].radius < brk[i].rect.x:
                         gameball[j].collide("x")
-                    elif gameball[j].state_penetrate == False:
+                    else:
                         gameball[j].collide("y")
                     point.play()
-                elif (pygame.time.get_ticks() - brk[i].hit_tick) > 500 and brk[i].state == 'stationary' and brk[i].stage > 1 and allsprite.has(brk[i]) and gameball[j].rect.y+gameball[j].dy*2 <= brk[i].rect.y+brk[i].brickHeight and gameball[j].rect.y+gameball[j].radius+gameball[j].dy*2 >= brk[i].rect.y and gameball[j].rect.x+gameball[j].dx*2 <= brk[i].rect.x+brk[i].brickWidth and gameball[j].rect.x+gameball[j].radius+gameball[j].dx*2 >= brk[i].rect.x:
-                    brk[i].change_stage()
-                    score_board.add(round(brk[i].point*(1+combo*0.5)))
-                    combo+=1
 
-                    if gameball[j].state_penetrate == False and gameball[j].rect.x > brk[i].rect.x+brk[i].brickWidth or gameball[j].rect.x+gameball[j].radius < brk[i].rect.x:
-                        gameball[j].collide("x")
-                    elif gameball[j].state_penetrate == False:
-                        gameball[j].collide("y")
-                    point.play()
-        for i in range(gameball_count):           
+        for i in range(gameball_count):
             if gameball[i].state == 'onpad':
                 x , y = pad.getxy()
                 gameball[i].onpad(x, y)
@@ -1095,7 +1105,7 @@ def main():
 
     total_level = 10
     current_level = 1
-    current_life = 5
+    current_life = 10
     current_score = 0
     
     
@@ -1155,6 +1165,8 @@ def main():
                 
                 if event.key == pygame.K_LSHIFT:
                     current_level += 1
+                    if current_level > total_level:
+                        current_level -= total_level
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if windowWidth*4//10 <= mouse[0] <= (windowWidth*4//10 + windowWidth//5) and windowHeight*17//40 <= mouse[1] <= (windowHeight*17//40 + windowHeight//2):
@@ -1191,13 +1203,16 @@ def main():
                             current_level += 1
 
                         elif game_judge and current_level == total_level:
+                            current_score += current_life*1000
                             screen.fill((0,0,0))
                             font = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth // 12)
-                            screen.blit(font.render("Congratulation" , True,  (255, 255, 255),(0, 0, 0)),(windowWidth//3,windowHeight//3)) 
+                            screen.blit(font.render("Congratulation" , True,  (255, 255, 255),(0, 0, 0)),(windowWidth//5,windowHeight//3))
+                            font = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth // 32)
+                            screen.blit(font.render("Your Score: "+str(current_score), True,  (255, 255, 255),(0, 0, 0)),(windowWidth*3//8,windowHeight*4//5))
                             pygame.display.update()
-                            pygame.time.wait(2000)
+                            pygame.time.wait(5000)
                             current_level = 1
-                            current_life = 5
+                            current_life = 10
                             current_score = 0
                             game_judge = False
                             
@@ -1225,11 +1240,13 @@ def main():
                         elif current_life < 1:
                             screen.fill((0,0,0))
                             font = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth // 12)
-                            screen.blit(font.render("You lose" , True,  (255, 255, 255),(0, 0, 0)),(windowWidth//3,windowHeight//3)) 
+                            screen.blit(font.render("You lose" , True,  (255, 255, 255),(0, 0, 0)),(windowWidth//3,windowHeight//3))
+                            font = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth // 32)
+                            screen.blit(font.render("Your Score: "+str(current_score), True,  (255, 255, 255),(0, 0, 0)),(windowWidth*3//8,windowHeight*4//5))
                             pygame.display.update()
-                            pygame.time.wait(2000)
+                            pygame.time.wait(5000)
                             current_level = 1
-                            current_life = 5
+                            current_life = 10
                             current_score = 0
                             game_judge = False
                             
@@ -1256,7 +1273,7 @@ def main():
 
                         elif not game_judge:
                             current_level = 1
-                            current_life = 5
+                            current_life = 10
                             current_score = 0
                             
                             button.set_volume(SFX)

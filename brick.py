@@ -23,6 +23,8 @@ class brick(pygame.sprite.Sprite):
         self.bonusWidth = windowWidth//21
         self.bonusHeight = windowHeight // 15
         self.hit_tick = pygame.time.get_ticks()
+
+        
     def __str__(self):
         return str(self.id)
 
@@ -86,8 +88,5 @@ class brick(pygame.sprite.Sprite):
              self.image_pic = pygame.image.load(os.path.join("images", "yellowBrick1.png")).convert_alpha()
              self.image = pygame.transform.smoothscale(self.image_pic, (self.brickWidth, self.brickHeight))
         else:
-            
             self.image_pic = pygame.image.load(os.path.join("images", "redBrick1.png")).convert_alpha()
             self.image = pygame.transform.smoothscale(self.image_pic, (self.brickWidth, self.brickHeight))
-    
- 

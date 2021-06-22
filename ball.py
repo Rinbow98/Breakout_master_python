@@ -1,6 +1,7 @@
 import os, pygame, random, math
 
 class ball(pygame.sprite.Sprite):
+    
     def  __init__(self, windowWidth, windowHeight, x, y, speed,n):
         pygame.sprite.Sprite.__init__(self)
         self.id = n
@@ -14,8 +15,6 @@ class ball(pygame.sprite.Sprite):
         self.rect.y = y - self.radius
         self.state = 'onpad'
         self.pos_on_pad = 0
-        self.state_sticky = False
-        self.state_penetrate = False
         self.tempx = 0
         self.tempy = 0
         self.speed = speed
@@ -23,9 +22,6 @@ class ball(pygame.sprite.Sprite):
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
         self.start_tick = pygame.time.get_ticks()
-        self.bonus_start_tick = [None]*6
-        for i in range(6):
-            self.bonus_start_tick[i] = pygame.time.get_ticks()
         
 
     def update(self):
@@ -51,7 +47,6 @@ class ball(pygame.sprite.Sprite):
         self.angle %= math.pi*2
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
-
         
     def change(self, windowWidth, windowHeight):
         self.radius = windowWidth // 72
@@ -73,8 +68,8 @@ class ball(pygame.sprite.Sprite):
         self.dx = self.speed * math.cos(self.angle)
         self.dy = self.speed * math.sin(self.angle)
         
-    def penetrate(self):
-        if self.state_penetrate:
+    def penetrate(self, penetrate):
+        if penetrate:
             self.image_pic = pygame.image.load(os.path.join("images", "ballPenetrate.png")).convert_alpha()
         else:
             self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()
@@ -82,12 +77,3 @@ class ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.tempx
         self.rect.y = self.tempy
-
-    def reset(self):
-        self.angle = random.random()*math.pi/3*2 + math.pi/6*7
-        self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image_pic, (self.radius, self.radius))
-        self.rect = self.image.get_rect()
-        self.state = 'onpad'
-        self.state_sticky = False
-        self.state_penetrate = False
