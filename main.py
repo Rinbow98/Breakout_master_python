@@ -117,6 +117,8 @@ def gameloop(screen,lev,lif,sco):
                     click.play()
                     screen.fill((0,0,0))
                     pygame.display.update()
+                    pad.right = False
+                    pad.left = False
 
                     num = setting(screen)
                     if num == 1:
@@ -167,6 +169,8 @@ def gameloop(screen,lev,lif,sco):
                     click.play()
                     screen.fill((0,0,0))
                     pygame.display.update()
+                    pad.right = False
+                    pad.left = False
 
                     num = setting(screen)
                     if num == 1:
@@ -597,7 +601,7 @@ def option(screen):
     
 
     subtitleFont = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth//24)
-    resolution = subtitleFont.render("Resolution" , True,  (255, 255, 255),(0, 0, 0))
+    windowSize = subtitleFont.render("Window Size" , True,  (255, 255, 255),(0, 0, 0))
     volume = subtitleFont.render("Volume" , True,  (255, 255, 255),(0, 0, 0))
     fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
 
@@ -615,7 +619,7 @@ def option(screen):
     quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
     
     background.blit(option,(windowWidth*2//5, 0))
-    background.blit(resolution, (windowWidth//8, windowHeight*3//16))
+    background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
     for i in range(5):
         background.blit(res[i], (windowWidth//8, windowHeight*(i*2+5)//16))
         if dis[i] == windowWidth:
@@ -672,7 +676,7 @@ def option(screen):
                     option = titleFont.render("Option" , True,  (255, 255, 255),(0, 0, 0))
     
                     subtitleFont = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth//24)
-                    resolution = subtitleFont.render("Resolution" , True,  (255, 255, 255),(0, 0, 0))
+                    windowSize = subtitleFont.render("Window Size" , True,  (255, 255, 255),(0, 0, 0))
                     volume = subtitleFont.render("Volume" , True,  (255, 255, 255),(0, 0, 0))
                     fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
 
@@ -693,7 +697,7 @@ def option(screen):
                     background = background.convert()
                     background.fill((0,0,0))
                     background.blit(option,(windowWidth*2//5, 0))
-                    background.blit(resolution, (windowWidth//8, windowHeight*3//16))
+                    background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
                     for i in range(5):
                         background.blit(res[i], (windowWidth//8, windowHeight*(i*2+5)//16))
                         if dis[i] == windowWidth:
@@ -732,7 +736,7 @@ def option(screen):
                     option = titleFont.render("Option" , True,  (255, 255, 255),(0, 0, 0))
     
                     subtitleFont = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth//24)
-                    resolution = subtitleFont.render("Resolution" , True,  (255, 255, 255),(0, 0, 0))
+                    windowSize = subtitleFont.render("Window Size" , True,  (255, 255, 255),(0, 0, 0))
                     volume = subtitleFont.render("Volume" , True,  (255, 255, 255),(0, 0, 0))
                     fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
 
@@ -753,7 +757,7 @@ def option(screen):
                     background = background.convert()
                     background.fill((0,0,0))
                     background.blit(option,(windowWidth*2//5, 0))
-                    background.blit(resolution, (windowWidth//8, windowHeight*3//16))
+                    background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
                     for i in range(5):
                         background.blit(res[i], (windowWidth//8, windowHeight*(i*2+5)//16))
                         if dis[i] == windowWidth:
@@ -791,7 +795,7 @@ def option(screen):
                     option = titleFont.render("Option" , True,  (255, 255, 255),(0, 0, 0))
     
                     subtitleFont = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth//24)
-                    resolution = subtitleFont.render("Resolution" , True,  (255, 255, 255),(0, 0, 0))
+                    windowSize = subtitleFont.render("Window Size" , True,  (255, 255, 255),(0, 0, 0))
                     volume = subtitleFont.render("Volume" , True,  (255, 255, 255),(0, 0, 0))
                     fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
 
@@ -812,7 +816,7 @@ def option(screen):
                     background = background.convert()
                     background.fill((0,0,0))
                     background.blit(option,(windowWidth*2//5, 0))
-                    background.blit(resolution, (windowWidth//8, windowHeight*3//16))
+                    background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
                     for i in range(5):
                         background.blit(res[i], (windowWidth//8, windowHeight*(i*2+5)//16))
                         if dis[i] == windowWidth:
@@ -851,7 +855,7 @@ def option(screen):
                     option = titleFont.render("Option" , True,  (255, 255, 255),(0, 0, 0))
     
                     subtitleFont = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth//24)
-                    resolution = subtitleFont.render("Resolution" , True,  (255, 255, 255),(0, 0, 0))
+                    windowSize = subtitleFont.render("Window Size" , True,  (255, 255, 255),(0, 0, 0))
                     volume = subtitleFont.render("Volume" , True,  (255, 255, 255),(0, 0, 0))
                     fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
 
@@ -872,7 +876,7 @@ def option(screen):
                     background = background.convert()
                     background.fill((0,0,0))
                     background.blit(option,(windowWidth*2//5, 0))
-                    background.blit(resolution, (windowWidth//8, windowHeight*3//16))
+                    background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
                     for i in range(5):
                         background.blit(res[i], (windowWidth//8, windowHeight*(i*2+5)//16))
                         if dis[i] == windowWidth:
@@ -911,7 +915,7 @@ def option(screen):
                     option = titleFont.render("Option" , True,  (255, 255, 255),(0, 0, 0))
     
                     subtitleFont = pygame.font.Font(os.path.join("fonts", "comicsansms.ttf"), windowWidth//24)
-                    resolution = subtitleFont.render("Resolution" , True,  (255, 255, 255),(0, 0, 0))
+                    windowSize = subtitleFont.render("Window Size" , True,  (255, 255, 255),(0, 0, 0))
                     volume = subtitleFont.render("Volume" , True,  (255, 255, 255),(0, 0, 0))
                     fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
 
@@ -932,7 +936,7 @@ def option(screen):
                     background = background.convert()
                     background.fill((0,0,0))
                     background.blit(option,(windowWidth*2//5, 0))
-                    background.blit(resolution, (windowWidth//8, windowHeight*3//16))
+                    background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
                     for i in range(5):
                         background.blit(res[i], (windowWidth//8, windowHeight*(i*2+5)//16))
                         if dis[i] == windowWidth:
