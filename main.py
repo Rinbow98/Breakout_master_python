@@ -6,7 +6,7 @@ windowHeight = windowWidth * 9 // 16
 SFX = 0.2
 BGM = 0.1
 full = False
-p_bonus = 1/3
+p_bonus = 1 / 3
 bonus_time = 5000
 
 def gameloop(screen,lev,lif,sco):
@@ -53,7 +53,7 @@ def gameloop(screen,lev,lif,sco):
     allsprite = pygame.sprite.Group()
     combo = 0
     
-    brk = [None]*1000
+    brk = [None]*((position.height)*(position.width))
     for i in range((position.height)*(position.width)):
         if random.random() <= p_bonus:
             bonus_num =  random.randint(1,5)
@@ -120,7 +120,7 @@ def gameloop(screen,lev,lif,sco):
                     pad.right = False
                     pad.left = False
 
-                    num = setting(screen)
+                    num = pause(screen)
                     if num == 1:
                         return lif, sco, False
                     elif num == 2:
@@ -172,7 +172,7 @@ def gameloop(screen,lev,lif,sco):
                     pad.right = False
                     pad.left = False
 
-                    num = setting(screen)
+                    num = pause(screen)
                     if num == 1:
                         return lif, sco, False
                     elif num == 2:
@@ -380,7 +380,7 @@ def gameloop(screen,lev,lif,sco):
     return life,score_board.get_score(),False
 
 
-def setting(screen):
+def pause(screen):
 
     global windowWidth, windowHeight, SFX, BGM, full
 
@@ -616,7 +616,7 @@ def option(screen):
     sfx = font.render("SFX" , True,  (255, 255, 255),(0, 0, 0))
     bgmPercent = font.render(str(round(BGM*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
     sfxPercent = font.render(str(round(SFX*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
-    quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+    quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
     
     background.blit(option,(windowWidth*2//5, 0))
     background.blit(windowSize, (windowWidth//8, windowHeight*3//16))
@@ -691,7 +691,7 @@ def option(screen):
                     sfx = font.render("SFX" , True,  (255, 255, 255),(0, 0, 0))
                     bgmPercent = font.render(str(round(BGM*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
                     sfxPercent = font.render(str(round(SFX*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
-                    quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+                    quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
 
                     background = pygame.Surface(screen.get_size())
                     background = background.convert()
@@ -751,7 +751,7 @@ def option(screen):
                     sfx = font.render("SFX" , True,  (255, 255, 255),(0, 0, 0))
                     bgmPercent = font.render(str(round(BGM*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
                     sfxPercent = font.render(str(round(SFX*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
-                    quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+                    quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
 
                     background = pygame.Surface(screen.get_size())
                     background = background.convert()
@@ -810,7 +810,7 @@ def option(screen):
                     sfx = font.render("SFX" , True,  (255, 255, 255),(0, 0, 0))
                     bgmPercent = font.render(str(round(BGM*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
                     sfxPercent = font.render(str(round(SFX*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
-                    quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+                    quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
 
                     background = pygame.Surface(screen.get_size())
                     background = background.convert()
@@ -870,7 +870,7 @@ def option(screen):
                     sfx = font.render("SFX" , True,  (255, 255, 255),(0, 0, 0))
                     bgmPercent = font.render(str(round(BGM*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
                     sfxPercent = font.render(str(round(SFX*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
-                    quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+                    quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
 
                     background = pygame.Surface(screen.get_size())
                     background = background.convert()
@@ -930,7 +930,7 @@ def option(screen):
                     sfx = font.render("SFX" , True,  (255, 255, 255),(0, 0, 0))
                     bgmPercent = font.render(str(round(BGM*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
                     sfxPercent = font.render(str(round(SFX*100))+"%" , True,  (255, 255, 255),(0, 0, 0))
-                    quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+                    quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
 
                     background = pygame.Surface(screen.get_size())
                     background = background.convert()
@@ -1077,7 +1077,7 @@ def option(screen):
                 soundplay = True
 
         elif windowWidth*15//32 <= mouse[0] <= windowWidth*9//16 and windowHeight*7//8 <= mouse[1] <= windowHeight*31//32:
-            quit = font.render("QUIT" , True,  (150, 150, 150),(0, 0, 0))
+            quit = font.render("BACK" , True,  (150, 150, 150),(0, 0, 0))
             if not soundplay:
                 button.play()
                 soundplay = True
@@ -1088,7 +1088,7 @@ def option(screen):
             res[2] = font.render("1366x768" , True,  (255, 255, 255),(0, 0, 0))
             res[3] = font.render("1280x720" , True,  (255, 255, 255),(0, 0, 0))
             res[4] = font.render("960x540" , True,  (255, 255, 255),(0, 0, 0))
-            quit = font.render("QUIT" , True,  (255, 255, 255),(0, 0, 0))
+            quit = font.render("BACK" , True,  (255, 255, 255),(0, 0, 0))
             fullscreen = subtitleFont.render("Fullscreen", True, (255, 255, 255),(0, 0, 0))
             soundplay = False
 

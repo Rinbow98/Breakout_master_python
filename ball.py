@@ -2,13 +2,13 @@ import os, pygame, random, math
 
 class ball(pygame.sprite.Sprite):
     
-    def  __init__(self, windowWidth, windowHeight, x, y, speed,n):
+    def  __init__(self, windowWidth, windowHeight, x, y, speed, n):
         pygame.sprite.Sprite.__init__(self)
         self.id = n
         self.windowWidth = windowWidth
         self.windowHight = windowHeight
         self.radius = windowWidth // 72
-        self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()     
+        self.image_pic = pygame.image.load(os.path.join("images", "ball1.png")).convert_alpha()
         self.image = pygame.transform.smoothscale(self.image_pic, (self.radius, self.radius))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -26,7 +26,7 @@ class ball(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.x = self.tempx
-        self.rect.y = self.tempy
+        self.rect.y = self.tempy 
        
     def onpad(self,x,y):
         self.tempx = x + self.pos_on_pad

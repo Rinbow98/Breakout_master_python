@@ -7,6 +7,8 @@ class brick(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.id = n
         self.stage = 0
+        self.windowWidth = windowWidth
+        self.windowHeight = windowHeight
         self.i = int( (self.id) / position.width )
         self.j = int( (self.id) % position.width )
         self.brickWidth = windowWidth//position.width
@@ -64,7 +66,8 @@ class brick(pygame.sprite.Sprite):
              self.state = 'dropping'
              
     def move(self):
-        self.tempy += 5
+        if self.state == 'dropping':
+            self.tempy += self.windowHeight//180
               
     def update(self):
         self.rect.y = self.tempy
